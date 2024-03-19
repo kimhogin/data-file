@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>그래프 예제</title>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- 사용자로부터 x, y 축 값 입력을 받는 표 -->
+<table id="data-table">
+    <thead>
+        <tr>
+            <th>X 축</th>
+            <th>Y 축</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="text" class="x-value"></td>
+            <td><input type="text" class="y-value"></td>
+        </tr>
+        <!-- 필요한 만큼 행 추가 가능 -->
+    </tbody>
+</table>
+<button onclick="drawChart()">그래프 그리기</button>
+
+<!-- 그래프를 표시할 캔버스 -->
+<canvas id="myChart" width="100%"></canvas>
+
+<script>
+function drawChart() {
+    // 사용자로부터 표의 데이터 가져오기
+    const table = document.getElementById('data-table');
+    const rows = table.querySelectorAll('tbody tr');
+    
+    // x 축과 y 축 데이터를 저장할 배열
+    const labels = [];
+    const data = [];
+    
+    // 각 행에서 데이터 추출
+    rows.forEach(row => {
+        const xInput = row.querySelector('.x-value');
+        const yInput = row.querySelector('.y-value');
+        if (xInput.value && yInput.value) {
+            labels.push(xInput.value);
+            data.push(parseFloat(yInput.value));
+        }
+    });
+    
+    // 그래프를 그릴 캔버스 요소 가져오기
+    const ctx = document.getElementById('myChart').getContext('2d');
+    
+    // Chart.js를 사용하여 그래프 그리기
+    const myChart = new Chart(ctx, {
+        type: 'line', // 선 그래프
+        data: {
+            labels: labels, // x 축 값
+            datasets: [{
+                label: '데이터',
+                data: data, // y 축 값
+                backgroundColor: 'rgba(255, 99, 132, 0.2)', // 그래프 배경색
+                borderColor: 'rgba(255, 99, 132, 1)', // 그래프 선 색
+                borderWidth: 1 // 그래프 선 두께
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true // y 축 시작값 0으로 설정
+                    }
+                }]
+            }
+        }
+    });
+}
+</script>
+
+</body>
+</html>
